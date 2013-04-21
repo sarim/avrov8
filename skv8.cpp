@@ -2,6 +2,7 @@
 #include "skv8.h"
 #include <stdio.h>
 #include <string>
+
 using namespace v8;
 
 
@@ -138,6 +139,40 @@ void CommitString(const char* word,const char* candidate){
     word_committed_func->Call(global, 2, args);
 	
 	
+}
+
+std::vector<std::string> recvlists(std::string banglatxt){
+
+  Context::Scope context_scope(context);
+  Handle<Object> global = context->Global();
+  Handle<Value> recv_list =   global->Get(String::New("recvlist"));
+  Handle<Function> recv_list_func = Handle<Function>::Cast(recv_list);
+  Handle<Value> args[1];
+  Handle<Value> result;
+// Local<Object> objwords; 
+  int length = 0,ii;
+  std::vector<std::string> data;
+
+  args[0] = v8::String::New(banglatxt.c_str());
+  
+  result = recv_list_func->Call(global, 1, args);
+   
+//  objwords = result->ToObject();
+  Handle<Array> arr = result.As<Array>();
+
+  length = arr->Length();//objwords->Get(v8::String::New("length"))->ToObject()->Uint32Value();
+  
+  for(ii = 0 ; ii < length ; ii++){
+    Local<Value> element = arr->Get(ii);
+    String::Utf8Value cstrword(element);
+    //printf("%s",*cstrword);
+    data.push_back(*cstrword);
+  }
+
+//  wlists = words;
+  return data;
+
+
 }
 
 std::string avroparse(std::string banglatxt) {
