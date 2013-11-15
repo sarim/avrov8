@@ -12,7 +12,7 @@ HandleScope handle_scope;
 // Create a new context.
 Persistent<Context> context;
 
-std::string current_module_name;	
+std::string current_module_name;
 
 Handle<String> ReadFile(const char* name) {
   FILE* file = fopen(name, "rb");
@@ -39,18 +39,18 @@ const char* ToCString(const String::Utf8Value& value) {
 }
 
 Handle<Value> ReadFromFile(const Arguments& args){
-	
+
 	return ReadFile("candidate-selections.js");
-	
+
 }
-	
+
 Handle<Value> WriteToFile(const Arguments& args){
-	
+
     String::Utf8Value str(args[0]);
     const char* strcontent = ToCString(str);
-	
+
 	const char* fname = "candidate-selections.js";
-		
+
 	FILE* file = fopen(fname, "wb");
 	fprintf(file,"%s",strcontent);
 	fclose(file);
@@ -91,29 +91,30 @@ void loadfile(const char * filename){
     Handle<String> source = ReadFile(filename);
     // Compile the source code.
     Handle<Script> script = Script::Compile(source);
-	
+
 	script->Run();
 	printf("%s\n",filename);
-	
+
 }
 void loadjs(){
 
     // Create a new context.
-	
+
 	Handle<ObjectTemplate> global = ObjectTemplate::New();
-	
+
 	global->Set(String::New("print"), FunctionTemplate::New(Print));
 	global->Set(String::New("get_module_name"), FunctionTemplate::New(GetModuleName));
 	global->Set(String::New("save_to_file"), FunctionTemplate::New(WriteToFile));
 	global->Set(String::New("load_from_file"), FunctionTemplate::New(ReadFromFile));
-	
+
 	context = Context::New(NULL, global);
-	
+
 	loadfile("lib/platform.js");
 	loadfile("lib/utf8.js");
 	loadfile("lib/suffixdict.js");
 	loadfile("lib/autocorrect.js");
-	loadfile("lib/avrodict.js");
+	loadfile("lib/worddict.js");
+  loadfile("lib/patterndict.js");
 	loadfile("lib/levenshtein.js");
 	loadfile("lib/avrolib.js");
 	loadfile("lib/avroregexlib.js");
@@ -122,10 +123,10 @@ void loadjs(){
 	loadfile("lib/suggestionbuilder.js");
 	loadfile("lib/test.js");
 
-  
+
     // Enter the created context for compiling and
-    // running the hello world script. 
-	
+    // running the hello world script.
+
 }
 
 void CommitString(const char* word,const char* candidate){
@@ -137,8 +138,8 @@ void CommitString(const char* word,const char* candidate){
 	args[1] = String::New(word);
 	args[0] = String::New(candidate);
     word_committed_func->Call(global, 2, args);
-	
-	
+
+
 }
 
 std::vector<std::string> recvlists(std::string banglatxt){
@@ -149,19 +150,19 @@ std::vector<std::string> recvlists(std::string banglatxt){
   Handle<Function> recv_list_func = Handle<Function>::Cast(recv_list);
   Handle<Value> args[1];
   Handle<Value> result;
-// Local<Object> objwords; 
+// Local<Object> objwords;
   int length = 0,ii;
   std::vector<std::string> data;
 
   args[0] = v8::String::New(banglatxt.c_str());
-  
+
   result = recv_list_func->Call(global, 1, args);
-   
+
 //  objwords = result->ToObject();
   Handle<Array> arr = result.As<Array>();
 
   length = arr->Length();//objwords->Get(v8::String::New("length"))->ToObject()->Uint32Value();
-  
+
   for(ii = 0 ; ii < length ; ii++){
     Local<Value> element = arr->Get(ii);
     String::Utf8Value cstrword(element);
@@ -184,11 +185,11 @@ std::string avroparse(std::string banglatxt) {
   //std::string finalcode = code1 + banglatxt + code2;
   // Run the script to get the result.
   //Handle<String> source2 = String::New(finalcode.c_str());
-  
+
   //Handle<Script> script2 = Script::Compile(source2);
-   
+
  // Handle<Value> result = script2->Run();
-  
+
   Handle<Object> global = context->Global();
   Handle<Value> avro_parse =   global->Get(String::New("testfunc"));
   Handle<Function> avro_parse_func = Handle<Function>::Cast(avro_parse);
@@ -196,19 +197,19 @@ std::string avroparse(std::string banglatxt) {
   Handle<Value> result;
 
   args[0] = v8::String::New(banglatxt.c_str());
-  
+
   result = avro_parse_func->Call(global, 1, args);
-  
+
   // Dispose the persistent context.
   //context.Dispose();
 
   // Convert the result to an ASCII string and print it.
-  
+
   String::Utf8Value ascii(result);
 
   //printf("%s\n", *ascii);
   //char * bntext = *ascii;
   std::string bntext = std::string(*ascii);
-  
+
   return bntext;
 }
