@@ -1,2 +1,2 @@
 var megusta = new AvroPhonetic();
-console.log( megusta("sari") );
+console.log( megusta.suggest("sari") );
