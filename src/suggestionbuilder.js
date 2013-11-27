@@ -25,18 +25,23 @@
     =============================================================================
 */
 
-const gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-
 const dictsearch = imports.dbsearch;
 const autocorrectdb = imports.autocorrect.db;
 const Avroparser = imports.avrolib.OmicronLab.Avro.Phonetic;
-//const utfconvs = imports.utf8;
 const EditDistance = imports.levenshtein;
 const suffixDict = imports.suffixdict.db;
 
-function SuggestionBuilder(){
+function SuggestionBuilder(loadFunc, saveFunc, options){
+    if (typeof loadFunc == "function") {
+        this._loadCandidateSelectionsFromFile = loadFunc;
+    }
+    
+    if (typeof saveFunc == "function") {
+        this._saveCandidateSelectionsToFile = saveFunc;
+    }
+    
     this._init();
+    
 }
 
 SuggestionBuilder.prototype = {
@@ -366,31 +371,11 @@ SuggestionBuilder.prototype = {
     },
     
     
-    _loadCandidateSelectionsFromFile: function(){
-		
-        try {
-           this._candidateSelections = JSON.parse(load_from_file());			
-			
-			
-        } catch (e){
-           this._candidateSelections = {};
-           this._logger(e, 'Error in _loadCandidateSelectionsFromFile');
-        }
-		
-		
+    _loadCandidateSelectionsFromFile: function(){	
     },
     
     
     _saveCandidateSelectionsToFile: function(){
-		
-        try {
-			
-			save_to_file(JSON.stringify(this._candidateSelections));
-
-        } catch (e) {
-           this._logger(e, '_saveCandidateSelectionsToFile Error');
-       }
-	   
     },
 
 
@@ -430,11 +415,11 @@ SuggestionBuilder.prototype = {
             //Don't overwrite existing value
             if (!this._candidateSelections[eng]){
                 this._candidateSelections[eng] = base;
-                this._saveCandidateSelectionsToFile();
+                this._saveCandidateSelectionsToFile(this._candidateSelections);
             }
         }
         
-        this._saveCandidateSelectionsToFile();
+        this._saveCandidateSelectionsToFile(this._candidateSelections);
     },
     
     

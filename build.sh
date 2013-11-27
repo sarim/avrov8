@@ -1,4 +1,5 @@
-AVROLIBS="utf8 suffixdict autocorrect avrodict levenshtein avrolib avroregexlib dbsearch gi suggestionbuilder"
+#!/bin/sh
+AVROLIBS="utf8 suffixdict autocorrect avrodict levenshtein avrolib avroregexlib dbsearch suggestionbuilder"
 MYDIR=`pwd`
 LIBDIR=$MYDIR"/src"
 
@@ -17,10 +18,10 @@ cd $MYDIR
 
 echo //Shit Ends Here >> avro.build.js
 
-cat build.1.js > avro.final.js
+cat inc/build.1.js > avro.final.js
 cat avro.build.js >> avro.final.js
-cat build.2.js >> avro.final.js
+cat inc/build.2.js >> avro.final.js
 
-cat avro.final.js build.3.js > avro.test.js
+cat avro.final.js inc/build.3.js > avro.test.js
 
 rm avro.build.js
