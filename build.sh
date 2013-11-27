@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 AVROLIBS="utf8 suffixdict autocorrect avrodict levenshtein avrolib avroregexlib dbsearch suggestionbuilder"
 MYDIR=`pwd`
 LIBDIR=$MYDIR"/src"
