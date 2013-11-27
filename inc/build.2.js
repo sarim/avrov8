@@ -1,5 +1,5 @@
 
-        var sb = new imports.suggestionbuilder.SuggestionBuilder();
+        var sb = new imports.suggestionbuilder.SuggestionBuilder(loadFunc, saveFunc, options);
         
         var y = function(word){
                 return sb.suggest(word);
@@ -12,6 +12,6 @@
         return {suggest: y, commit: z};
     }
     
-    return new sandbox();
+    return new sandbox(loadFunc, saveFunc, options);
 }
 

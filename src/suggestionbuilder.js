@@ -48,9 +48,8 @@ SuggestionBuilder.prototype = {
     
     _init: function(){
         this._dbSearch = new dictsearch.DBSearch ();
-        this._candidateSelections = {};
+        this._candidateSelections = this._loadCandidateSelectionsFromFile();
         this._phoneticCache = {};
-        this._loadCandidateSelectionsFromFile();
         this._tempCache = {};
         this._pref = this._defaultPref();
     },
@@ -371,7 +370,8 @@ SuggestionBuilder.prototype = {
     },
     
     
-    _loadCandidateSelectionsFromFile: function(){	
+    _loadCandidateSelectionsFromFile: function(){
+        return {}
     },
     
     

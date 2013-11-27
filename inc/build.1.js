@@ -1,5 +1,5 @@
-var AvroPhonetic = function(){
-    var sandbox = function(){
+var AvroPhonetic = function(loadFunc, saveFunc, options){
+    var sandbox = function(loadFunc, saveFunc, options){
         
         var imports = {};
         var modulename;
