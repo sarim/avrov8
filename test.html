@@ -2,15 +2,25 @@
 <html>
 	<head>
 		<title>Avrolib Test</title>
+		<style>
+		.selected {
+			background-color : gray;
+		}
+		li:hover {
+			border: 1px solid blue;
+		}
+		</style>
 		<script>
 		var sstime = Date.now();
 		</script>
-		<script src="avro.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="avro.final.js" type="text/javascript" charset="utf-8"></script>
 		<script>
-		//var tmp = new AvroForGaia();
 		window.avroloadtime = Date.now() - sstime;
+		</script>
+		<script src="plugins/localStorage.js" type="text/javascript" charset="utf-8"></script>
+		<script>
 		var sstime = Date.now();
-		var megusta = new AvroForGaia();
+		var megusta = new AvroPhonetic(lSLoader, lSSaver);
 		window.avroinittime = Date.now() - sstime;
 		</script>
 	</head>
@@ -20,11 +30,35 @@
 			document.write(	window.avroloadtime );
 			</script>
 		</p>
-		<br>
 		<p> Avro Object Init Time :
 			<script>
 			document.write(	window.avroinittime );
 			</script>
 		</p>
+		<input id="txtword" type="text">
+		<button id="fireme">Fire</button>
+		<ul id="sglist">
+		</ul>
+		<script>
+		$$ = function(a) {
+			return document.querySelector(a);
+		}
+		$$('#fireme').onclick = function (e) {
+			var enword = $$('#txtword').value;
+			$$("ul").setAttribute('data-word',enword);
+			var sglist = megusta.suggest(enword);
+			var li = "";
+			sglist.words.forEach(function (word, i){
+				if (sglist.prevSelection == i)
+				li += "<li class='selected'>" + word + "</li>";
+				else
+				li += "<li data-index='" +i+ "'>" + word + "</li>";
+			});
+			$$('#sglist').innerHTML = li;
+		};
+		$$('#sglist').onclick = function(e) {
+			megusta.commit($$("ul").getAttribute('data-word'),e.target.innerHTML);
+		}
+		</script>
 	</body>
 </html>

@@ -6,6 +6,7 @@
         }
         
         var z = function(word, candidate){
+                sb.updateCandidateSelection(word, candidate);
                 sb.stringCommitted(word, candidate);
         }
         
