@@ -1,6 +1,6 @@
 AVROLIBS="utf8 suffixdict autocorrect avrodict levenshtein avrolib avroregexlib dbsearch gi suggestionbuilder"
 MYDIR=`pwd`
-LIBDIR="/Users/sarim/ibus-avro/avrov8/lib"
+LIBDIR=$MYDIR"/src"
 
 echo //Shit Starts Here > avro.build.js
 
