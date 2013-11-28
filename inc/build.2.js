@@ -10,7 +10,11 @@
                 sb.stringCommitted(word, candidate);
         }
         
-        return {suggest: y, commit: z};
+        var n = function(word){
+            return sb._candidateSelections[word];
+        }
+        
+        return {suggest: y, commit: z, candidate: n};
     }
     
     return new sandbox(loadFunc, saveFunc, options);
