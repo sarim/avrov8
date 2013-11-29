@@ -157,10 +157,12 @@ AvroRegex.prototype = {
                 output += fixed.charAt(cur);
             }
         }
-        return this._convertToUnicodeValue(output);
+        // return this._convertToUnicodeValue(output);
+        return output;
     },
     
     
+    //TODO: There is a bug in this hardcoded '\\u0'. Fix it.
     _convertToUnicodeValue: function(input){
         var output = '';
         input = utfconvs.utf8Decode(input);
