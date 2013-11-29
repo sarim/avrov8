@@ -162,7 +162,6 @@ AvroRegex.prototype = {
     },
     
     
-    //TODO: There is a bug in this hardcoded '\\u0'. Fix it.
     _convertToUnicodeValue: function(input){
         var output = '';
         input = utfconvs.utf8Decode(input);
@@ -170,7 +169,11 @@ AvroRegex.prototype = {
         for (var i = 0; i < input.length; i++){
             var charCode = input.charCodeAt(i);
             if (charCode >= 255){
-                output += '\\u0' + charCode.toString(16);
+                var hexCode = charCode.toString(16);
+                var zeroCount = 4 - hexCode.length
+                var zeros="";
+                for (;zeroCount > 0;zeroCount--) zeros += "0";
+                output += '\\u' + zeros + hexCode
             } else {
                 output += input.charAt(i);
             }
