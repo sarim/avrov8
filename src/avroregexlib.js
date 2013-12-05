@@ -157,7 +157,8 @@ AvroRegex.prototype = {
                 output += fixed.charAt(cur);
             }
         }
-        return this._convertToUnicodeValue(output);
+        // return this._convertToUnicodeValue(output);
+        return output;
     },
     
     
@@ -168,7 +169,11 @@ AvroRegex.prototype = {
         for (var i = 0; i < input.length; i++){
             var charCode = input.charCodeAt(i);
             if (charCode >= 255){
-                output += '\\u0' + charCode.toString(16);
+                var hexCode = charCode.toString(16);
+                var zeroCount = 4 - hexCode.length
+                var zeros="";
+                for (;zeroCount > 0;zeroCount--) zeros += "0";
+                output += '\\u' + zeros + hexCode
             } else {
                 output += input.charAt(i);
             }
