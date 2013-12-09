@@ -14,7 +14,7 @@
             return sb._candidateSelections[word];
         }
         
-        return {suggest: y, commit: z, candidate: n};
+        return {suggest: y, commit: z, candidate: n, version: "" + imports.version};
     }
     
     return new sandbox(loadFunc, saveFunc, options);
